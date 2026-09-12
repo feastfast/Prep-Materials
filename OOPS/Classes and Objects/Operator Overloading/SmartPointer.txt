@@ -1,0 +1,57 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+template <typename t>
+class SmartPointer
+{
+public:
+    t* ptr;
+    SmartPointer(t*p=nullptr):ptr(p){}
+    ~SmartPointer()
+    {
+        delete ptr;
+    }
+    SmartPointer(const SmartPointer&)=delete;
+    SmartPointer& operator=(const SmartPointer&)=delete;
+
+    t* operator ->()const
+    {
+        return ptr;                  //returns pointer to the object
+    }
+
+    t& operator *()const
+    {
+        return *ptr;             //returns reference to the object
+    }
+
+    //move constructor
+    SmartPointer(SmartPointer&& other):ptr(other.ptr)
+    {
+        other=nullptr;
+    }
+    //move assignment operator
+    SmartPointer& operator=(SmartPointer&& other)
+    {
+        if(this!=&other)
+        {
+            delete ptr;
+            ptr=other.ptr;
+            other.ptr=nullptr;
+        }
+        return *this;
+    }
+};
+class MyClass
+{
+public:
+    void display()
+    {
+        cout<<"Display Called "<<endl;
+    }
+};
+
+int main()
+{
+    SmartPointer<MyClass> p(new MyClass());
+    p->display();
+}

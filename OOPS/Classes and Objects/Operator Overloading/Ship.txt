@@ -1,0 +1,64 @@
+#include<iostream>
+using namespace std;
+class Ship
+{
+protected:
+    string name,year;
+public:
+    Ship(string n,string y):name(n),year(y){}
+    void setName(string n)
+    {
+        name=n;
+    }
+    virtual void print()
+    {
+        cout<<"Name : "<<name;
+        cout<<"\nYear : "<<year;
+    }
+    virtual ~Ship(){}
+};
+
+class CruiseShip:public Ship
+{
+    int maxPassengers;
+public:
+    CruiseShip(string n,string y,int m):Ship(n,y),maxPassengers(m){}
+    void setMaxPassengers(int m)
+    {
+        maxPassengers=m;
+    }
+    void print() override
+    {
+        Ship::print();
+        cout<<"\nMaximum Number Of Passengers : "<<maxPassengers<<endl;
+    }
+};
+
+class CargoShip:public Ship
+{
+    int capacity;
+public:
+    CargoShip(string n,string y,int c):Ship(n,y),capacity(c){}
+    void setCapacity(int c)
+    {
+        capacity=c;
+    }
+    void print() override
+    {
+        cout<<"Name : "<<name<<endl;
+        cout<<"Capacity : "<<capacity<<endl;
+    }
+};
+int main()
+{
+    Ship* s[3];
+    s[0]=new Ship("abc","1947");
+    s[1]=new CruiseShip("bcf","1890",670);
+    s[2]=new CargoShip("def","2004",560);
+    for(int i=0;i<3;i++)
+    {
+        s[i]->print();
+        cout<<endl;
+        delete s[i];
+    }
+}

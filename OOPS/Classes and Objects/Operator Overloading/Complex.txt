@@ -1,0 +1,202 @@
+#include<iostream>
+#include<math.h>
+using namespace std;
+class Complex
+{
+    private:
+        float x,y;
+    public:
+        Complex(float=0,float=0);
+        Complex(Complex &);
+        friend ostream& operator << (ostream&,const Complex&);
+        Complex& operator - ();
+        Complex& operator ++ ();
+        Complex operator =(const Complex&);
+        Complex operator ++(int);
+        float operator [](int);
+        float operator ()();
+        void operator ()(float);
+        bool operator ==(Complex&);
+        bool operator !=(Complex&);
+        friend Complex operator +(Complex&,Complex&);
+        friend Complex operator -(Complex&,Complex&);
+        friend Complex operator *(Complex&,Complex&);
+        friend Complex operator /(Complex&,Complex&);
+        void operator +=(Complex&);
+        void operator -=(Complex&);
+        void operator *=(Complex&);
+        void operator /=(Complex&);
+        float operator *(){return x;}
+
+};
+Complex::Complex(float xx,float yy ): x(xx),y(yy){}
+Complex::Complex(Complex& c):x(c.x),y(c.y){}
+ostream& operator << (ostream& os,const Complex& c)
+{
+    os<<c.x;
+    if (c.y<0)
+       os<<c.y<<"i"<<endl;
+    else
+        os<<"+"<<c.y<<"i"<<endl;
+    return os;
+}
+Complex& Complex::operator -()
+{
+    x=(-x);
+    y=(-y);
+    return *this;
+}
+Complex& Complex::operator ++ ()
+{
+    ++x;
+    ++y;
+    return *this;
+}
+Complex Complex::operator = (const Complex& c)
+{
+    x=c.x;
+    y=c.y;
+    return (*this);
+}
+Complex Complex::operator++(int)
+{
+    Complex t=*this;
+    x++;
+    y++;
+    return t;
+}
+float Complex::operator[](int i)
+{
+    if(i)
+        return y;
+    else
+        return x;
+}
+float Complex:: operator ()()
+{
+    return pow(x*x+y*y,0.5);
+}
+void Complex::operator()(float x)
+{
+    this->x=x;
+    this->y=x;
+}
+bool Complex::operator ==(Complex &c)
+{
+    if(x==c.x && y==c.y)
+        return true;
+    else
+        return false;
+}
+bool Complex::operator !=(Complex &c)
+{
+    if(x!=c.x || y!=c.y)
+        return true;
+    else
+        return false;
+}
+Complex operator +(Complex& c1,Complex& c2)
+{
+    Complex c3;
+    c3.x=c1.x+c2.x;
+    c3.y=c1.y+c2.y;
+    return c3;
+}
+Complex operator -(Complex& c1,Complex& c2)
+{
+    Complex c3;
+    c3.x=c1.x-c2.x;
+    c3.y=c1.y-c2.y;
+    return c3;
+}
+Complex operator *(Complex& c1,Complex& c2)
+{
+    Complex c3;
+    c3.x=c1.x * c2.x -c1.y *c2.y;
+    c3.y=c1.x*c2.y + c2.x *c1.y;
+    return c3;
+}
+Complex operator/(Complex& c1,Complex& c2)
+{
+    Complex c3;
+    float m=c2.x*c2.x + c2.y*c2.y;
+    c3.x=(c1.x *c2.x +c1.y *c2.y)/m;
+    c3.y=(-(c1.x*c2.y)+ c2.x *c1.y)/m;
+    return c3;
+}
+void Complex::operator +=(Complex& c)
+{
+    (*this)=(*this)+c;
+}
+void Complex::operator -=(Complex& c)
+{
+    (*this)=(*this)-c;
+}
+void Complex::operator *=(Complex& c)
+{
+    (*this)=(*this)*c;
+}
+void Complex::operator /=(Complex& c)
+{
+    (*this)=(*this)/c;
+}
+int main()
+{
+    Complex c1(2, 3), c2(4, -5), c3;
+
+    cout << "Initial values:\n";
+    cout << "c1: " << c1;
+    cout << "c2: " << c2;
+
+    // Addition
+    c3 = c1 + c2;
+    cout << "\nc1 + c2: " << c3;
+
+    // Subtraction
+    c3 = c1 - c2;
+    cout << "c1 - c2: " << c3;
+
+    // Multiplication
+    c3 = c1 * c2;
+    cout << "c1 * c2: " << c3;
+
+    // Division
+    c3 = c1 / c2;
+    cout << "c1 / c2: " << c3;
+
+    // Negation
+    cout << "-c1: " << -c1;
+
+    // Prefix Increment
+    cout << "++c1: " << ++c1;
+
+    // Postfix Increment
+    cout << "c1++: " << c1++ << " (after increment: " << c1 << ")\n";
+
+    // Magnitude (using operator())
+    cout << "|c1|: " << c1() << "\n";
+
+    // Indexing
+    cout << "c1[0] (real part): " << c1[0] << "\n";
+    cout << "c1[1] (imaginary part): " << c1[1] << "\n";
+
+    // Equality and inequality
+    cout << "c1 == c2: " << (c1 == c2 ? "true" : "false") << "\n";
+    cout << "c1 != c2: " << (c1 != c2 ? "true" : "false") << "\n";
+
+    // Compound assignment
+    c1 += c2;
+    cout << "c1 += c2: " << c1;
+    c1 -= c2;
+    cout << "c1 -= c2: " << c1;
+    c1 *= c2;
+    cout << "c1 *= c2: " << c1;
+    c1 /= c2;
+    cout << "c1 /= c2: " << c1;
+    cout<<"Derefernce = "<<*c2<<endl;
+    c1(100);
+    cout<<"After Changing : "<<c1;
+
+    return 0;
+}
+
